@@ -61,24 +61,25 @@ JaggedTensor::JaggedTensor(const std::vector<torch::Tensor> &tensors) {
 
     // This is an implementation detail where we don't store jidx for
     // a single list since everything is just zero by default.
-    if (tensors.size() == 1) {
-        // If you have a single element tensor with 0 dimensions, we unsqueeze it to make it 1D
-        mData = tensors[0];
-        if (tensors[0].dim() == 0) {
-            mData = mData.unsqueeze(0);
-        }
-        TORCH_CHECK(mData.dim() > 0,
-                    "assigned data must have shape [N, ...], but got data.dim() = 0");
-        mBatchIdx = torch::empty(
-            { 0 }, torch::TensorOptions().dtype(JIdxScalarType).device(mData.device()));
-        mOffsets =
-            torch::tensor({ JOffsetsType(0), mData.size(0) },
-                          torch::TensorOptions().dtype(JOffsetsScalarType).device(mData.device()));
-        mListIdx = torch::empty(
-            { 0, 1 }, torch::TensorOptions().dtype(JLIdxScalarType).device(mData.device()));
-        mNumOuterLists = 1;
-        return;
-    }
+    // BUG: delete
+    // if (tensors.size() == 1) {
+    //     // If you have a single element tensor with 0 dimensions, we unsqueeze it to make it 1D
+    //     mData = tensors[0];
+    //     if (tensors[0].dim() == 0) {
+    //         mData = mData.unsqueeze(0);
+    //     }
+    //     TORCH_CHECK(mData.dim() > 0,
+    //                 "assigned data must have shape [N, ...], but got data.dim() = 0");
+    //     mBatchIdx = torch::empty(
+    //         { 0 }, torch::TensorOptions().dtype(JIdxScalarType).device(mData.device()));
+    //     mOffsets =
+    //         torch::tensor({ JOffsetsType(0), mData.size(0) },
+    //                       torch::TensorOptions().dtype(JOffsetsScalarType).device(mData.device()));
+    //     mListIdx = torch::empty(
+    //         { 0, 1 }, torch::TensorOptions().dtype(JLIdxScalarType).device(mData.device()));
+    //     mNumOuterLists = 1;
+    //     return;
+    // }
 
     torch::Device device = tensors[0].device();
 

@@ -796,6 +796,8 @@ inline BufferT PointsToGrid<BuildT>::getBuffer(const PtrT, size_t pointCount, co
 
     int device = 0;
     cudaGetDevice(&device);
+    // std::cout<<"device";
+    // std::cout<<device<<std::endl;
     auto buffer = BufferT::create(mData.size, &pool, device, mStream);// only allocate buffer on the device
 
     mData.d_bufferPtr = buffer.deviceData();

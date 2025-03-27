@@ -88,6 +88,7 @@ buildNearestNeighborGridFromPoints(bool isMutable, const JaggedTensor &points,
                                    const std::vector<VoxelCoordTransform> &txs) {
     if (points.device().is_cuda()) {
         JaggedTensor coords = ops::dispatchNearestNeighborIJKForPoints<torch::kCUDA>(points, txs);
+        // std::cout<<coords.device()<<std::endl;
         return ops::dispatchCreateNanoGridFromIJK<torch::kCUDA>(coords, isMutable);
     } else {
         return FVDB_DISPATCH_GRID_TYPES_MUTABLE(isMutable, [&]() {

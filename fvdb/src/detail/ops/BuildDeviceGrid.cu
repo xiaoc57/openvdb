@@ -149,8 +149,10 @@ dispatchCreateNanoGridFromIJK<torch::kCUDA>(const JaggedTensor &ijk, bool isMuta
         // function. We can't pass in a device directly but we can pass in a buffer which gets
         // passed to TorchDeviceBuffer::create. The guide buffer holds the device and effectively
         // passes it to the created buffer.
+        // std::cout<<ijk.device().index()<<std::endl;
         TorchDeviceBuffer guide(0, nullptr, false, ijk.device().index());
-
+        // std::cout<<ijk.device().index()<<std::endl;
+        // std::cout<<ijk.device()<<std::endl;
         // FIXME: This is slow because we have to copy this data to the host and then build the
         // grids. Ideally we want to do this in a single invocation.
         torch::Tensor ijkBOffsetTensor = ijk.joffsets().cpu();
@@ -163,6 +165,7 @@ dispatchCreateNanoGridFromIJK<torch::kCUDA>(const JaggedTensor &ijk, bool isMuta
         // Create a grid for each batch item and store the handles
         std::vector<nanovdb::GridHandle<TorchDeviceBuffer>> handles;
         for (int i = 0; i < (ijkBOffset.size(0) - 1); i += 1) {
+            // std::cout<<i * 5<<std::endl;
             const int64_t startIdx = ijkBOffset[i];
             const int64_t nVoxels  = ijkBOffset[i + 1] - startIdx;
             // torch::Tensor ijkDataSlice = ijkData.narrow(0, startIdx, nVoxels);

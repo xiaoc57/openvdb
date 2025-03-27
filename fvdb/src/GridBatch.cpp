@@ -14,6 +14,7 @@ namespace fvdb {
 
 GridBatch::GridBatch(TorchDeviceOrString device, bool isMutable) {
     detail::RAIIDeviceGuard guard(device.value());
+    // std::cout<<device.value()<<std::endl;
     mImpl = c10::make_intrusive<detail::GridBatchImpl>(device.value(), isMutable);
 }
 
@@ -600,6 +601,7 @@ void
 GridBatch::set_from_nearest_voxels_to_points(const JaggedTensor       &points,
                                              const Vec3dBatchOrScalar &voxel_sizes,
                                              const Vec3dBatch         &origins) {
+    // std::cout<<device()<<std::endl;
     detail::RAIIDeviceGuard guard(device());
     TORCH_CHECK_VALUE(
         points.ldim() == 1,

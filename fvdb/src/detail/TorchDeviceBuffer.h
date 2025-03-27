@@ -143,7 +143,8 @@ class TorchDeviceBuffer {
     /// @return An instance of this class using move semantics
     static TorchDeviceBuffer create(uint64_t size, const TorchDeviceBuffer *guide = nullptr,
                                     bool host = true, void *stream = nullptr);
-
+    static TorchDeviceBuffer create(uint64_t size, const TorchDeviceBuffer *guide,
+        int host, void *stream = nullptr);
 }; // TorchDeviceBuffer class
 
 } // namespace detail

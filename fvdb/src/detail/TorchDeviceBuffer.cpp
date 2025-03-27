@@ -270,16 +270,39 @@ TorchDeviceBuffer::clear() {
 
 TorchDeviceBuffer
 TorchDeviceBuffer::create(uint64_t size, const TorchDeviceBuffer *proto, bool host, void *stream) {
+    // host must >= 0
     // This is a hack to pass in the device index when creating grids from nanovdb. Since we can't
     // pass arguments through nanovdb creation functions, we use a prototype grid to pass in the
     // device index.
     int deviceId = -1;
+    // std::cout<<proto->device()<<std::endl;
+    // std::cout<<proto->device().is_cuda()<<std::endl;
+    // std::cout<<!host<<std::endl;
     if (proto != nullptr) {
         TORCH_CHECK((host && proto->device().is_cpu()) || (!host && proto->device().is_cuda()),
                     "Invalid guide buffer device for host argument to TorchDeviceBuffer::create");
         deviceId = proto->mDevice.index();
     }
     return TorchDeviceBuffer(size, nullptr, host, host ? -1 : deviceId);
+}
+
+TorchDeviceBuffer
+TorchDeviceBuffer::create(uint64_t size, const TorchDeviceBuffer *proto, int host, void *stream) {
+    // host must >= 0
+    // This is a hack to pass in the device index when creating grids from nanovdb. Since we can't
+    // pass arguments through nanovdb creation functions, we use a prototype grid to pass in the
+    // device index.
+    int deviceId = -1;
+    // std::cout<<proto->device()<<std::endl;
+    // std::cout<<proto->device().is_cuda()<<std::endl;
+    // std::cout<<!host<<std::endl;
+    bool _host = host >= 0 ? false : true;
+    if (proto != nullptr) {
+        TORCH_CHECK((host && proto->device().is_cpu()) || (!_host && proto->device().is_cuda()),
+                    "Invalid guide buffer device for host argument to TorchDeviceBuffer::create");
+        deviceId = proto->mDevice.index();
+    }
+    return TorchDeviceBuffer(size, nullptr, _host, _host ? -1 : deviceId);
 }
 
 void

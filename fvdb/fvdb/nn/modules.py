@@ -427,7 +427,6 @@ class GroupNorm(nn.GroupNorm):
                 feat = feat.reshape(num_channels, -1).transpose(0, 1)
 
                 result_data[flat_offsets[b] : flat_offsets[b + 1]] = feat
-
         return VDBTensor(input.grid, input.grid.jagged_like(result_data), input.kmap)
 
 
