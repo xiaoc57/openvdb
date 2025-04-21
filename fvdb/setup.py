@@ -138,12 +138,12 @@ class FVDBBuildCommand(cpp_extension.BuildExtension):
         # A sibling nanovdb source directory will exist if fvdb is being built as part of OpenVDB
         sibling_nanovdb_dir = Path("../nanovdb")
         if not sibling_nanovdb_dir.exists():
-            openvdb_url = "https://kkgithub.com/kmuseth/openvdb.git"
+            openvdb_url = "https://github.com/kmuseth/openvdb.git"
             self.download_external_dep(name="openvdb", git_url=openvdb_url, git_tag="feature/nanovdb_v32.7")
 
         _, cutlass_repo = self.download_external_dep(
             name="cutlass",
-            git_url="https://kkgithub.com/NVIDIA/cutlass.git",
+            git_url="https://github.com/NVIDIA/cutlass.git",
             git_tag="v3.4.0",
         )
         try:
@@ -154,13 +154,13 @@ class FVDBBuildCommand(cpp_extension.BuildExtension):
 
         self.download_external_dep(
             name="cudnn_fe",
-            git_url="https://kkgithub.com/NVIDIA/cudnn-frontend",
+            git_url="https://github.com/NVIDIA/cudnn-frontend",
             git_tag="v1.3.0",
         )
 
         blosc_source_dir, _ = self.download_external_dep(
             name="c-blosc",
-            git_url="https://kkgithub.com/Blosc/c-blosc.git",
+            git_url="https://github.com/Blosc/c-blosc.git",
             git_tag="v1.21.4",
         )
         self.build_cmake_project(
@@ -171,10 +171,11 @@ class FVDBBuildCommand(cpp_extension.BuildExtension):
                 "-DBUILD_FUZZERS=OFF",
                 "-DBUILD_BENCHMARKS=OFF",
                 "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
+                "-DCMAKE_POLICY_VERSION_MINIMUM=3.5",
             ],
         )
 
-        self.download_external_dep(name="glm", git_url="https://kkgithub.com/g-truc/glm.git", git_tag="1.0.1")
+        self.download_external_dep(name="glm", git_url="https://github.com/g-truc/glm.git", git_tag="1.0.1")
 
         self.old_inplace = self.inplace
         super().run()
